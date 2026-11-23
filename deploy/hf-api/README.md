@@ -5,7 +5,13 @@ colorTo: green
 sdk: docker
 app_port: 7860
 pinned: false
+license: mit
 ---
+
+> Deployment repository of the Hugging Face Space
+> [sam-bot/get-around-api](https://huggingface.co/spaces/sam-bot/get-around-api).
+> Source, tests and CI live in [tryph0n/getarround](https://github.com/tryph0n/getarround).
+> This repository is a copy made with `make stage-api`: do not edit here.
 
 # Getaround Pricing API
 
@@ -27,4 +33,9 @@ curl -X POST https://sam-bot-get-around-api.hf.space/predict \
 
 ## Deployment
 
-This Space is deployed from the Getaround project repository.
+Built and uploaded with `make deploy-api` from the source repository.
+
+## Data
+
+The model is trained on data provided by the Jedha training course (Getaround case study).
+The provider states no licence. The data is not covered by the code licence.
