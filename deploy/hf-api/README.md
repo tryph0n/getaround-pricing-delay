@@ -10,7 +10,7 @@ license: mit
 
 > Deployment repository of the Hugging Face Space
 > [sam-bot/get-around-api](https://huggingface.co/spaces/sam-bot/get-around-api).
-> Source, tests and CI live in [tryph0n/getarround](https://github.com/tryph0n/getarround).
+> Source, tests and CI live in [tryph0n/getaround-pricing-delay](https://github.com/tryph0n/getaround-pricing-delay).
 > This repository is a copy made with `make stage-api`: do not edit here.
 
 # Getaround Pricing API

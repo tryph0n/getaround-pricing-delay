@@ -32,8 +32,8 @@ The project source of truth is the repository root. Deployment follows an
 - Hugging Face Spaces builds the Docker image from the uploaded `Dockerfile`.
 
 The deployment repositories
-[getaround_api](https://github.com/tryph0n/getaround_api) and
-[getaround_dashboard](https://github.com/tryph0n/getaround_dashboard) are copies
+[getaround-pricing-api](https://github.com/tryph0n/getaround-pricing-api) and
+[getaround-delay-dashboard](https://github.com/tryph0n/getaround-delay-dashboard) are copies
 of the staged trees. They are updated by hand from `.tmp/hf-*` after a deploy.
 Change the code here, not there.
 

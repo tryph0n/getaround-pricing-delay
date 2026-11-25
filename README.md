@@ -1,6 +1,6 @@
 # Getaround - Delay Analysis & Pricing API
 
-[![CI](https://github.com/tryph0n/getarround/actions/workflows/ci.yml/badge.svg)](https://github.com/tryph0n/getarround/actions/workflows/ci.yml)
+[![CI](https://github.com/tryph0n/getaround-pricing-delay/actions/workflows/ci.yml/badge.svg)](https://github.com/tryph0n/getaround-pricing-delay/actions/workflows/ci.yml)
 
 > End-to-end data science project for the Getaround car rental platform: a Streamlit dashboard to analyze checkout delays between rentals, and a FastAPI-served ML pricing prediction API, tracked with MLflow and containerized with Docker.
 
@@ -27,11 +27,11 @@ This is a training course project. It covers three learning objectives:
 
 | Component | Link |
 |-----------|------|
-| Source, tests and CI (this repository) | https://github.com/tryph0n/getarround |
+| Source, tests and CI (this repository) | https://github.com/tryph0n/getaround-pricing-delay |
 | Pricing API demo (Swagger docs) | https://sam-bot-get-around-api.hf.space/docs |
 | Delay analysis dashboard demo | https://sam-bot-get-around-dashboard.hf.space |
-| API deployment repository (copy of the `make stage-api` tree) | https://github.com/tryph0n/getaround_api |
-| Dashboard deployment repository (copy of the `make stage-dashboard` tree) | https://github.com/tryph0n/getaround_dashboard |
+| API deployment repository (copy of the `make stage-api` tree) | https://github.com/tryph0n/getaround-pricing-api |
+| Dashboard deployment repository (copy of the `make stage-dashboard` tree) | https://github.com/tryph0n/getaround-delay-dashboard |
 
 Change the code here. The deployment repositories are copies of the staged trees.
 
@@ -76,7 +76,7 @@ Best model: **Gradient Boosting** (lowest RMSE, highest R-squared). Saved as `mo
 ## Quick Start
 
 ```bash
-git clone https://github.com/tryph0n/getarround.git && cd getarround
+git clone https://github.com/tryph0n/getaround-pricing-delay.git && cd getaround-pricing-delay
 cp .env.example .env  # optional, defaults work out of the box
 make install-dev      # Install all dependencies (dev and notebooks groups)
 make train            # Train model (generates models/best_model.joblib)
