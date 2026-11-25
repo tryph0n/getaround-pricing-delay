@@ -1,6 +1,5 @@
 """Integration tests for API and ML pipeline."""
 
-import os
 from pathlib import Path
 
 import pytest
@@ -10,8 +9,8 @@ from tests.factories import BudgetCarFactory, LuxuryCarFactory
 
 _model_path = Path(__file__).parent.parent.parent / "models" / "best_model.joblib"
 _skip_no_model = pytest.mark.skipif(
-    not _model_path.exists() or os.getenv("CI") == "true",
-    reason="Model file not available (CI or missing locally)",
+    not _model_path.exists(),
+    reason="Model file not available (run 'make train' first)",
 )
 
 

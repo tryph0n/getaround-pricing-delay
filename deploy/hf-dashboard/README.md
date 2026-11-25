@@ -5,7 +5,13 @@ colorTo: pink
 sdk: docker
 app_port: 7860
 pinned: false
+license: mit
 ---
+
+> Deployment repository of the Hugging Face Space
+> [sam-bot/get-around-dashboard](https://huggingface.co/spaces/sam-bot/get-around-dashboard).
+> Source, tests and CI live in [tryph0n/getarround](https://github.com/tryph0n/getarround).
+> This repository is a copy made with `make stage-dashboard`: do not edit here.
 
 # Getaround Delay Analysis Dashboard
 
@@ -28,4 +34,8 @@ Interactive dashboard to help Product Managers decide on minimum delay threshold
 
 ## Deployment
 
-This Space is deployed from the Getaround project repository.
+Built and uploaded with `make deploy-dashboard` from the source repository.
+
+## Data
+
+Data provided by the Jedha training course (Getaround case study). The provider states no licence. The data files are not covered by the code licence.

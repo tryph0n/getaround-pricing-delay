@@ -102,3 +102,13 @@ class TestPredictValidation:
         invalid_car["mileage"] = "not_a_number"
         response = api_client_with_mock.post("/predict", json={"cars": [invalid_car]})
         assert response.status_code == 422
+
+
+def test_openapi_available(api_client_with_mock: TestClient) -> None:
+    """The docs page and the OpenAPI schema should be served."""
+    assert api_client_with_mock.get("/docs").status_code == 200
+    response = api_client_with_mock.get("/openapi.json")
+    assert response.status_code == 200
+    paths = response.json()["paths"]
+    assert "/predict" in paths
+    assert "/health" in paths

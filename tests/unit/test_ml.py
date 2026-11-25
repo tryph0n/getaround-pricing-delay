@@ -497,7 +497,7 @@ class TestTrainAndEvaluate:
         assert result["residual_std"] > 0
 
     def test_rscv_path_returns_best_params(self):
-        """With param_distributions provided, best_params and cv_best_score must be set."""
+        """With param_distributions, best_params and cv_best_score must be set."""
         from sklearn.ensemble import RandomForestRegressor
 
         from src.ml.train import train_and_evaluate
@@ -618,9 +618,9 @@ class TestRunExperimentMLflowLogging:
             )
 
         # Total: 6*3 + 2 + 4*3 = 32 metric calls
-        assert (
-            len(logged_metric_names) == 32
-        ), f"Expected 32 total metric calls, got {len(logged_metric_names)}"
+        assert len(logged_metric_names) == 32, (
+            f"Expected 32 total metric calls, got {len(logged_metric_names)}"
+        )
 
         # log_params called once per model (3 times total)
         assert mock_log_params.call_count == 3, (
@@ -640,7 +640,7 @@ class TestRunExperimentMLflowLogging:
                 f"Expected artifact name 'feature_importances.json', "
                 f"got '{artifact_name}'"
             )
-            assert isinstance(
-                fi_dict, dict
-            ), f"Expected a dict for feature importances, got {type(fi_dict)}"
+            assert isinstance(fi_dict, dict), (
+                f"Expected a dict for feature importances, got {type(fi_dict)}"
+            )
             assert len(fi_dict) > 0, "Feature importances dict must not be empty"

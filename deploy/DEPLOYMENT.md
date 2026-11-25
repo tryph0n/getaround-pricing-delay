@@ -1,33 +1,54 @@
 # Deployment Guide
 
+Deploys are manual. Only the owner of the Hugging Face Spaces runs them: the
+upload needs the owner's Hugging Face token. CI builds the Docker images
+from the staged trees and tests them, but it never uploads anything.
+
 ## Prerequisites
 
-- Python 3.11+ with `uv` installed
-- `huggingface-cli` available (via `pip install huggingface-hub` or `uvx huggingface-hub`)
-- Authenticated with HF Hub (`huggingface-cli login`)
-- For API deployment: a trained model at `models/best_model.joblib` (run `make train` first)
+- Python 3.11 with `uv` installed
+- The `hf` command line tool, run through `uvx` at the version pinned in the
+  Makefile (`HF_HUB_VERSION`, huggingface_hub 1.x). No other install is needed.
+- Authenticated with the Hugging Face Hub:
+  `uvx --from huggingface_hub==<HF_HUB_VERSION> hf auth login`
+- For the API: a trained model at `models/best_model.joblib`
 
 ## Architecture
 
 The project source of truth is the repository root. Deployment follows an
 **assemble-on-deploy** strategy:
 
-- `deploy/hf-api/` and `deploy/hf-dashboard/` contain only HF Spaces metadata
-  (`Dockerfile`, `README.md`, `.dockerignore`).
-- The `make deploy-*` targets assemble the required source files together with
-  the metadata into a temporary `.tmp/` directory, then upload the result to
-  HF Spaces via `huggingface-cli`.
-- HF Spaces builds the Docker image from the uploaded `Dockerfile`.
+- `deploy/hf-api/` and `deploy/hf-dashboard/` hold the files of each Space:
+  `Dockerfile`, `README.md`, `.dockerignore`, `.gitignore`, `.gitattributes`
+  and a per-demo dependency list (`pyproject.toml`, `uv.lock`). Each list holds
+  only what its demo needs. The root `pyproject.toml` and `uv.lock` are not
+  deployed.
+- `make stage-api` and `make stage-dashboard` assemble these files with the
+  required source files in `.tmp/hf-api/` and `.tmp/hf-dashboard/`. They
+  upload nothing.
+- `make deploy-api` and `make deploy-dashboard` run the stage target, then
+  upload the staged tree with `hf upload`. The upload does not delete files
+  that are already in the Space.
+- Hugging Face Spaces builds the Docker image from the uploaded `Dockerfile`.
 
-No git clone of a HF Space repo is needed. The Makefile handles everything.
+The deployment repositories
+[getaround_api](https://github.com/tryph0n/getaround_api) and
+[getaround_dashboard](https://github.com/tryph0n/getaround_dashboard) are copies
+of the staged trees. They are updated by hand from `.tmp/hf-*` after a deploy.
+Change the code here, not there.
 
-## Deploy Commands
+## Commands
 
 ```bash
-make deploy-api          # Deploy API to HF Spaces
-make deploy-dashboard    # Deploy dashboard to HF Spaces
+make stage-api           # Build the API staging tree, no upload
+make stage-dashboard     # Build the dashboard staging tree, no upload
+make deploy-api          # Stage and upload the API (owner only)
+make deploy-dashboard    # Stage and upload the dashboard (owner only)
 make deploy-all          # Deploy both
 ```
+
+Run `make -n deploy-api` or `make -n deploy-dashboard` first to read the exact
+upload command.
 
 ## HF Spaces URLs
 
@@ -38,23 +59,28 @@ make deploy-all          # Deploy both
 
 ## What Gets Deployed
 
-### API
+The stage targets copy these files. The `COPY` lines of each `Dockerfile`
+take the source, model and data from this list.
+
+### API (`make stage-api`)
 
 | Category | Files |
 |----------|-------|
-| Metadata | `deploy/hf-api/Dockerfile`, `deploy/hf-api/README.md` |
-| Dependencies | `pyproject.toml`, `uv.lock` |
-| Source | `src/api/`, `src/ml/` (predict + preprocessing only), `src/config/` |
+| Space files | the files of `deploy/hf-api/` that git does not ignore |
+| License | `LICENSE` |
+| Source | `src/__init__.py`, `src/api/`, `src/ml/__init__.py`, `src/ml/predict.py`, `src/ml/preprocessing.py`, `src/config/` |
 | Model | `models/best_model.joblib` |
 
-### Dashboard
+### Dashboard (`make stage-dashboard`)
 
 | Category | Files |
 |----------|-------|
-| Metadata | `deploy/hf-dashboard/Dockerfile`, `deploy/hf-dashboard/README.md` |
-| Dependencies | `pyproject.toml`, `uv.lock` |
-| Source | `src/dashboard/`, `src/config/` |
-| Data | `data/` |
+| Space files | the files of `deploy/hf-dashboard/` that git does not ignore |
+| License | `LICENSE` |
+| Source | `src/__init__.py`, `src/dashboard/` (with `sections/`), `src/config/` |
+| Data | `data/*.csv` |
+
+Both stage targets remove `__pycache__` and `.ruff_cache` folders.
 
 ## Important Notes
 
@@ -63,12 +89,8 @@ make deploy-all          # Deploy both
 - **Port 7860 is mandatory.** HF Spaces Docker runtime expects the application
   to listen on port 7860. Both Dockerfiles are configured accordingly (FastAPI
   via `--port 7860`, Streamlit via `STREAMLIT_SERVER_PORT=7860`).
-- The root `pyproject.toml` includes all dependencies (API + dashboard). This
-  produces heavier Docker images but keeps the workflow simple with a single
-  lock file.
-- Dockerfiles install production dependencies only with
-  `uv sync --no-group dev --frozen` (excludes the dev group containing MLflow
-  and test tools).
+- **The staged model is the live model.** Do not stage a retrained model
+  without a decision to replace the live one.
 - HF Spaces rebuilds the Docker image on every upload. There is no incremental
   build cache between deploys.
 

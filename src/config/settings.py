@@ -71,7 +71,7 @@ class Settings(BaseSettings):
         return getattr(logging, self.log_level.upper(), logging.INFO)
 
 
-# Logging config by environment (from ORCHESTRATION.md)
+# Logging config by environment
 LOGGING_CONFIG: dict[Environment, dict[str, int | str]] = {
     Environment.DEVELOPMENT: {
         "level": logging.DEBUG,
