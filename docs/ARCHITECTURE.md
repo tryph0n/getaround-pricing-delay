@@ -82,7 +82,7 @@ Three models are compared: LinearRegression, RandomForestRegressor, GradientBoos
 ## Project Structure
 
 ```
-getarround/
+getaround-pricing-delay/
     .github/workflows/ci.yml    # GitHub Actions: lint, unit tests, integration, Docker
     data/
         get_around_delay_analysis.xlsx  # source file, read by notebook 01
@@ -268,7 +268,7 @@ Deploys are manual, and only the owner runs them. First, a stage target assemble
 
 Then `make deploy-api` or `make deploy-dashboard` uploads the staged tree with `hf upload` (huggingface_hub 1.x, run through `uvx`), without deleting files in the Space. The Dockerfiles `COPY` the same source modules, and use a multi-stage build: the builder stage installs the per-demo dependency list, and the production stage runs as non-root user uid 1000.
 
-The deployment repositories `tryph0n/getaround_api` and `tryph0n/getaround_dashboard` are copies of the staged trees, updated by hand.
+The deployment repositories `tryph0n/getaround-pricing-api` and `tryph0n/getaround-delay-dashboard` are copies of the staged trees, updated by hand.
 
 ### HF Spaces URLs
 

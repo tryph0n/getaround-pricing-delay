@@ -71,10 +71,10 @@ jobs:
           name: model
           path: models
       - run: make stage-api stage-dashboard
-      - run: docker build --tag getarround-api .tmp/hf-api
-      - run: docker build --tag getarround-dashboard .tmp/hf-dashboard
-      - run: docker run --detach --name api --publish 8000:7860 getarround-api
-      - run: docker run --detach --name dashboard --publish 8501:7860 getarround-dashboard
+      - run: docker build --tag getaround-api .tmp/hf-api
+      - run: docker build --tag getaround-dashboard .tmp/hf-dashboard
+      - run: docker run --detach --name api --publish 8000:7860 getaround-api
+      - run: docker run --detach --name dashboard --publish 8501:7860 getaround-dashboard
       - name: Wait for the API health check
         run: |
           for _ in $(seq 1 60); do
